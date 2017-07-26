@@ -1,0 +1,123 @@
+// 61 points partial solution
+
+# include <bits/stdc++.h>
+# include "grader.h"
+
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair < int, int > pii;
+typedef unsigned long long ull;
+
+const int N = int(5e5) + 5;
+const int inf = (int)1e9 + 7;
+const int B = (int)(sqrt(2e5)) + 30;
+
+int id[N], mn[N], mx[N], pos[N];
+vector < int > e[N];
+
+void init(int n){
+  for(int i = 0; i < n; ++i){
+    id[i] = i / B;
+    pos[i] = i - id[i] * B;
+    e[id[i]].push_back(0);
+  }
+  for(int i = 0; i <= id[n - 1]; ++i){
+    mn[i] = -inf;
+    mx[i] = inf;
+  }
+}
+
+void updblock(int bl){
+  for(int i = 0; i < (int)e[bl].size(); ++i){
+    if(e[bl][i] < mn[bl]){
+      e[bl][i] = mn[bl];
+    }
+  }
+  mn[bl] = -inf;
+  for(int i = 0; i < (int)e[bl].size(); ++i){
+    if(e[bl][i] > mx[bl]){
+      e[bl][i] = mx[bl];
+    }
+  }
+  mx[bl] = inf;
+}
+
+void upd(int l, int r, int x, int t){
+  if(id[l] == id[r]){
+    updblock(id[l]);
+    for(int j = pos[l]; j <= pos[r]; ++j){
+      if(t == 1){
+        if(e[id[l]][j] < x){
+          e[id[l]][j] = x;
+        }
+      } else{
+        if(e[id[l]][j] > x){
+          e[id[l]][j] = x;
+        }
+      }
+    }
+    return;
+  }
+  updblock(id[l]);
+  for(int j = pos[l]; j < (int)e[id[l]].size(); ++j){
+    if(t == 1){
+      if(e[id[l]][j] < x){
+        e[id[l]][j] = x;
+      }
+    } else{
+      if(e[id[l]][j] > x){
+        e[id[l]][j] = x;
+      }
+    }
+  }
+  updblock(id[r]);
+  for(int j = pos[r]; j >= 0; --j){
+    if(t == 1){
+      if(e[id[r]][j] < x){
+        e[id[r]][j] = x;
+      }
+    } else{
+      if(e[id[r]][j] > x){
+        e[id[r]][j] = x;
+      }
+    }
+  }
+  for(int j = id[l] + 1; j < id[r]; ++j){
+    if(t == 1){
+      if(mx[j] < x){
+        mn[j] = mx[j] = x;
+      } else if(mn[j] < x){
+        mn[j] = x;
+      }
+    } else{
+      if(mn[j] > x){
+        mn[j] = mx[j] = x;
+      } else if(mx[j] > x){
+        mx[j] = x;
+      }
+    }
+  }
+}
+
+void refreshall(int n){
+  for(int i = 0; i <= id[n - 1]; ++i){
+    updblock(i);
+  }
+}
+
+void buildWall(int n, int k, int op[], int left[], int right[], int height[], int finalHeight[]){
+  init(n);
+  for(int i = 0; i < k; ++i){
+    if(op[i] == 1){
+      upd(left[i], right[i], height[i], 1);
+    } else{
+      upd(left[i], right[i], height[i], 2);
+    }
+  }
+  refreshall(n);
+  for(int i = 0; i < n; ++i){
+    finalHeight[i] = e[id[i]][pos[i]];
+  }
+}
