@@ -12,7 +12,7 @@ const int inf = (int)1e9 + 7;
 
 int n;
 int s[N], u[N];
-int cnt[N], mx;
+int cnt[N];
 ll ans;
 vector < int > g[N], primes;
 
@@ -41,7 +41,6 @@ int find_root(int v, int p, int tot){
 
 void add(int v, int p, int h, int val){
   cnt[h] += val;
-  mx = max(mx, h);
   for(int i : g[v]){
     if(i == p || u[i]){
       continue;
@@ -72,7 +71,6 @@ void calc(int v, int p, int h, ll &e){
 
 ll solve(int v){
   ll tot = 0;
-  mx = 0;
   for(int i : g[v]){
     if(u[i]){
       continue;
