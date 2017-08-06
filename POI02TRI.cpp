@@ -14,12 +14,15 @@ int x;
 vector < int > all;
 
 int main(){
-  while(~scanf("%d", &x)){
-    if(x){
-      all.push_back(x);
-    } else{
+  while(1){
+    scanf("%d", &x);
+    if(!x){
       break;
     }
+    if((int)all.size() > 50){
+      break;
+    }
+    all.push_back(x);
   }
   sort(all.begin(), all.end());
   for(int i = 0; i + 2 < (int)all.size(); ++i){
