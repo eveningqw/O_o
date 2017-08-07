@@ -36,20 +36,6 @@ void dfs2(int v){
 }
 
 int main(){
-  //9s2s1s100s9s10000s0s1s3s4s3s2s4s2s1s8s5s8s7s5s6s7s6s4s5s
-  // 9 2
-  // 1 100
-  // 9 10000
-  // 1 3
-  // 4 3
-  // 2 4
-  // 2 1
-  // 8 5
-  // 8 7
-  // 5 6
-  // 7 6
-  // 4 5
-
   scanf("%d %d", &n, &t);
   for(int i = 1; i <= n; ++i){
     cost[i] = inf;
